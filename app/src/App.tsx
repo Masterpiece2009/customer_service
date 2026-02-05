@@ -103,9 +103,9 @@ const complaintTypes = {
 };
 
 // ============================================
-// IMPORTANT: REPLACE THIS WITH YOUR WEB APP URL
+// IMPORTANT: UPDATED URL (From your first message)
 // ============================================
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyw5_a0j5JBh09gbig2Qr4YCpASH1fIAJKcagWv7_bcfbuuG_OVMKnqNuKXKZuulW6zag/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZwQ5UZURA7X1vec7N6_Eihf7H_5VQa7qZwN38VpeBpg9KiW_oURMRzglbD1VqFVyjlQ/exec';
 
 function App() {
   const [language, setLanguage] = useState<Language>('ar');
@@ -151,6 +151,7 @@ function App() {
     setDebugInfo('');
 
     try {
+      // Prepare data
       const data = {
         timestamp: new Date().toISOString(),
         language: language,
@@ -160,30 +161,39 @@ function App() {
       };
 
       console.log('Sending data:', data);
-      console.log('To URL:', GOOGLE_SCRIPT_URL);
-
-      // Method 1: Using no-cors mode (data sends but response is opaque)
-      await fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
+      
+      // =========================================================
+      // CRITICAL FIX: text/plain + NO 'no-cors'
+      // =========================================================
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        // Do NOT use mode: 'no-cors' here
         headers: {
-          'Content-Type': 'application/json',
+          // This tricks the browser into skipping the preflight check
+          "Content-Type": "text/plain;charset=utf-8",
         },
         body: JSON.stringify(data),
       });
 
-      // Since no-cors doesn't let us read the response, we assume success
-      // after a short delay to ensure the request was sent
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      console.log('Request sent successfully');
-      setIsSuccess(true);
-      setFormData({ customerName: '', complaintType: '', notes: '' });
+      if (!response.ok) {
+        throw new Error(`Network response was not ok: ${response.status}`);
+      }
+
+      // Now we CAN read the response because we aren't using no-cors
+      const result = await response.json();
+      console.log("Server Response:", result);
+
+      if (result.success) {
+        setIsSuccess(true);
+        setFormData({ customerName: '', complaintType: '', notes: '' });
+      } else {
+        throw new Error(result.message || 'Unknown server error');
+      }
       
     } catch (err: any) {
       console.error('Submit error:', err);
-      setError(t.error + ' - ' + (err.message || 'Unknown error'));
-      setDebugInfo(`Error: ${err.toString()}`);
+      setError(t.error); // Show user-friendly message
+      setDebugInfo(`Error details: ${err.toString()}`); // Show debug info
     } finally {
       setIsSubmitting(false);
     }
