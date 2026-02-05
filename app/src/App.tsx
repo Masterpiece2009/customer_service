@@ -104,7 +104,7 @@ const complaintTypes = {
 };
 
 // Google Apps Script URL - REPLACE THIS WITH YOUR DEPLOYED SCRIPT URL
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxlFYgzbrPgEMsZJ90nKf-t96gq-govSvqRHRGyLQ5V9C84njlQJ-ORPTpbnLCTq-Frjw/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzRxZ5KYnLrJV66jqrNoge4P7Nkag7uqRJ9aeLKQZpBzO0TMKrumgjLR5v-_xpXNIg7/exec';
 
 function App() {
   const [language, setLanguage] = useState<Language>('ar');
