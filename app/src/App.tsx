@@ -106,7 +106,8 @@ const complaintTypes = {
 // IMPORTANT: UPDATED URL (From your first message)
 // ============================================
 // Replace the old line with this exact one:
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZwQ5UZURA7X1vec7N6_Eihf7H_5VQa7qZwN38VpeBpg9KiW_oURMRzglbD1VqFVyjlQ/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxYg61NyShuQS6Llh1s2BS10GFWeS0aqwGooKRpJ4ln6k6_-AfYq0vuQZV0XgaydXHUKA/exec';
+
 function App() {
   const [language, setLanguage] = useState<Language>('ar');
   const [formData, setFormData] = useState({
